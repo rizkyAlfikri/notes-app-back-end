@@ -23,6 +23,11 @@ const CollaborationsService = require('./services/postgres/CollaborationsService
 const CollaborationValidator = require('./validator/collaborations');
 const TokenManager = require('./tokenize/TokenManager');
 
+// exports
+const _exports = require('./api/exports');
+const ProducerService = require('./services/rabbitmq/ProducerService');
+const ExportsValidator = require('./validator/exports');
+
 const init = async () => {
     const server = Hapi.server({
         port: process.env.PORT,
@@ -94,7 +99,16 @@ const init = async () => {
                 validator: CollaborationValidator,
             },
         },
+        {
+            plugin: _exports,
+            options: {
+                service: ProducerService,
+                validator: ExportsValidator,
+            },
+        },
     ]);
+
+    console.log(ExportsValidator);
 
     await server.start();
     console.log(`Sever berjalan pada ${server.info.uri}`);

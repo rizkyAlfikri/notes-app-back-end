@@ -100,7 +100,7 @@ class NotesService {
         if (!result.rows.length) {
             throw new NotFoundError('Catatan tidak ditemukan');
         }
-
+        
         const note = result.rows[0];
 
         if (note.owner !== owner) {
